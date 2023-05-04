@@ -53,6 +53,15 @@ const signInWithGoogle = async () => {
   }
 };
 
+const submitNewNote = async (note) => {
+  try {
+    const docRef = await addDoc(collection(db, "notes"), note);
+    console.log("Document written with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};
+
 const logInWithEmailAndPassword = async (email, password) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
@@ -98,6 +107,7 @@ export {
   signInWithGoogle,
   logInWithEmailAndPassword,
   registerWithEmailAndPassword,
+  submitNewNote,
   sendPasswordReset,
   logout,
 };

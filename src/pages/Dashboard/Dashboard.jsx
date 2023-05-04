@@ -7,41 +7,6 @@ import { query, collection, getDocs, where } from "firebase/firestore";
 import NoteList from "../Notes_Prototype/NoteList";
 import AddNote from "../Notes_Prototype/AddNote";
 
-const defaultNotes = [
-  {
-    id: 'uuid.v4()',
-    title: "Reflection 1",
-    content: "Lorem ipsum fake fake fake generated",
-    mood: "😌",
-    date: 1626535547228,
-    image: "src/assets/note_img.png",
-  },
-  {
-    id: 'uuid.v4()',
-    title: "Reflection 2",
-    content: "Lorem ipsum fake fake fake generated",
-    mood: "😆",
-    date: 1626535547228,
-    image: "../../assets/note_img.png",
-  },
-  {
-    id: 'uuid.v4()',
-    title: "Reflection 3",
-    content: "Lorem ipsum fake fake fake generated",
-    mood: "😆",
-    date: 1626535547228,
-    image: "../../assets/note_img.png",
-  },
-  {
-    id: 'uuid.v4()',
-    title: "Reflection 4",
-    content: "Lorem ipsum fake fake fake generated",
-    mood: "😑",
-    date: 1626535547228,
-    image: "../../assets/note_img.png",
-  },
-];
-
 
 function Dashboard() {
   //Fetch user details
@@ -60,16 +25,36 @@ function Dashboard() {
       alert("An error occured while fetching user data");
     }
   };
+  const fetchNotes = async () => {
+    try {
+      const q2 = query(collection(db, "notes"));
+      const doc2 = await getDocs(q2);
+      const onlineNotes = doc2.docs.map(doc => doc.data());
+      setNotes(onlineNotes)
+    } catch (err) {
+      console.log(err);
+      alert("An error occured while fetching notes");
+    }
+  }
+
+  useEffect(() => {
+    fetchUserName();
+  }, [])
+
+  useEffect(() => {
+    //fetchNotes();
+  })
+
   useEffect(() => {
     if (loading) return;
     if (!user) return navigate("/");
-    fetchUserName();
-  }, [user, loading, navigate, fetchUserName]);
+    //fetchNotes();
+  }, [user, loading, navigate]);
 
   //Notes variables
 
   const [isNoteList, setIsNoteList] = useState(true);
-  const [notes, setNotes] = useState(defaultNotes);
+  const [notes, setNotes] = useState([]);
 
   function onNavigate(val) {
     setIsNoteList(val);
@@ -101,18 +86,17 @@ function Dashboard() {
           </select>
         </div>
         <nav className="main-nav">
-          <a
-            href="#"
+          <div
             className="btn btn--primary"
             onClick={() => onNavigate(true)}
           >
             <img src="./images/grid_icon.png" alt="" />
             <span>View All</span>
-          </a>
-          <a href="#" className="btn" onClick={() => onNavigate(false)}>
+          </div>
+          <div className="btn" onClick={() => onNavigate(false)}>
             <img src="./images/pen_icon.svg" alt="" />
             <span>New Entry</span>
-          </a>
+          </div>
         </nav>
       </header>
       {isNoteList ? <NoteList notes={notes} /> : <AddNote addNote={addNote} />}

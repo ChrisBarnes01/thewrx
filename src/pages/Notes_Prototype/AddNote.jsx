@@ -1,4 +1,5 @@
 import "./notes.css";
+import {submitNewNote} from '../../firebase'
 
 const MOODS = [
   "😌",
@@ -25,12 +26,9 @@ function AddNote({ addNote }) {
 
     const form = new FormData(e.target);
     const data = Object.fromEntries(form);
-
-    //get submission id
-    //data.id = uuid.v4();
-
+    console.log("New note to submit")
     console.log(data);
-    addNote(data);
+    submitNewNote(data);
   }
 
   return (
