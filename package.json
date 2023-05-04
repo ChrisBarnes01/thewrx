@@ -40,5 +40,10 @@
   },
   "devDependencies": {
     "react-router-dom": "^6.11.1"
+  },
+  "overrides": {
+    "react-scripts": {
+      "typescript": "^5"
+    }
   }
 }
