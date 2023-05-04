@@ -36,14 +36,15 @@ function Dashboard() {
       alert("An error occured while fetching notes");
     }
   }
-
+  
   useEffect(() => {
-    fetchUserName();
+    fetchNotes();
   }, [])
 
   useEffect(() => {
-    //fetchNotes();
-  })
+    fetchUserName();
+  }, [fetchUserName])
+
 
   useEffect(() => {
     if (loading) return;
