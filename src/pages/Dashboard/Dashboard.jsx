@@ -5,9 +5,10 @@ import "./Dashboard.css";
 import { auth, db, logout } from "../../firebase";
 import { query, collection, getDocs, where } from "firebase/firestore";
 function Dashboard() {
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const [name, setName] = useState("");
   const navigate = useNavigate();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchUserName = async () => {
     try {
       const q = query(collection(db, "users"), where("uid", "==", user?.uid));
@@ -23,23 +24,21 @@ function Dashboard() {
     if (loading) return;
     if (!user) return navigate("/");
     fetchUserName();
-  }, [user, loading]);
+  }, [user, loading, navigate, fetchUserName]);
   return (
     <div>
-      <h1>Hi, {name}</h1>
+        <h1>Hi, {name}</h1>
+      <div className="dashboard">
+        <div className="dashboard__container">
+          Logged in as
+          <div>{name}</div>
+          <div>{user?.email}</div>
+          <button className="dashboard__btn" onClick={logout}>
+            Logout
+          </button>
+        </div>
+      </div>
     </div>
   );
-  {
-    /*<div className="dashboard">
-       <div className="dashboard__container">
-        Logged in as
-         <div>{name}</div>
-         <div>{user?.email}</div>
-         <button className="dashboard__btn" onClick={logout}>
-          Logout
-         </button>
-       </div>
-  </div>*/
-  }
 }
 export default Dashboard;
